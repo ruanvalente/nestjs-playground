@@ -30,4 +30,8 @@ export class UserService {
   async show(id: string): Promise<User> {
     return this.userRepository.show(id);
   }
+
+  async destroy(id: string): Promise<void> {
+    await this.userRepository.destroy(id);
+  }
 }
