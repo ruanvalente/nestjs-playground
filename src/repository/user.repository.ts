@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 
-import bcrypt from 'bcrypt';
+import { hash } from 'bcrypt';
 
 import { User } from 'src/user/entity/user.entity';
 import { UserDTO } from '../user/dto/user';
@@ -9,7 +9,7 @@ import { UserDTO } from '../user/dto/user';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   private hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, 64);
+    return hash(password, 10);
   }
 
   async store(userDTO: UserDTO): Promise<User> {
@@ -21,7 +21,7 @@ export class UserRepository extends Repository<User> {
     user.name = name;
     user.age = age;
     user.email = email;
-    user.password = password;
+    user.password = await this.hashPassword(password);
 
     try {
       await user.save();
