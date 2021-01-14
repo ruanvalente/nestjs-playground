@@ -17,8 +17,8 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  findAll(): any {
-    // return this.userService.findAll();
+  async index(): Promise<UserDTO[]> {
+    return await this.userService.index();
   }
 
   @Post()

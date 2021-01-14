@@ -40,4 +40,14 @@ export class UserRepository extends Repository<User> {
       }
     }
   }
+
+  async index(): Promise<User[]> {
+    const users = this.find();
+
+    if (!users) {
+      throw new HttpException('No data currently registered', HttpStatus.OK);
+    }
+
+    return users;
+  }
 }
