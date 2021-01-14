@@ -12,10 +12,10 @@ export class UserRepository extends Repository<User> {
     return hash(password, 10);
   }
 
-  async store(userDTO: UserDTO): Promise<User> {
-    const { username, name, age, email, password } = userDTO;
+  async store(userRequest: UserDTO): Promise<User> {
+    const { username, name, age, email, password } = userRequest;
 
-    const user = this.create();
+    const user = await this.create();
 
     user.username = username;
     user.name = name;
@@ -42,12 +42,24 @@ export class UserRepository extends Repository<User> {
   }
 
   async index(): Promise<User[]> {
-    const users = this.find();
+    const users = await this.find();
 
     if (!users) {
       throw new HttpException('No data currently registered', HttpStatus.OK);
     }
 
     return users;
+  }
+
+  async show(id: string): Promise<User> {
+    const user = await this.findOne(id, {
+      select: ['email', 'name', 'username', 'id'],
+    });
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    return user;
   }
 }

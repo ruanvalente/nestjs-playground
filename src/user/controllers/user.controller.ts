@@ -27,9 +27,9 @@ export class UserController {
     return createUser;
   }
 
-  @Get(':username')
-  show(@Param() params: UserDTO) {
-    // return this.userService.show(params.username);
+  @Get(':id')
+  async show(@Param() userRequest: UserDTO): Promise<UserDTO> {
+    return await this.userService.show(userRequest.id);
   }
 
   @Put()

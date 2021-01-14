@@ -26,4 +26,8 @@ export class UserService {
   async index(): Promise<User[]> {
     return this.userRepository.index();
   }
+
+  async show(id: string): Promise<User> {
+    return this.userRepository.show(id);
+  }
 }
