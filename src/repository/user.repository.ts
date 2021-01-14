@@ -62,4 +62,16 @@ export class UserRepository extends Repository<User> {
 
     return user;
   }
+
+  async destroy(id: string): Promise<void> {
+    const user = await this.findOne(id, {
+      select: ['id'],
+    });
+
+    if (!user) {
+      throw new HttpException('User ID not found', HttpStatus.NOT_FOUND);
+    }
+
+    await this.delete({ id: id });
+  }
 }

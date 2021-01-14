@@ -38,8 +38,8 @@ export class UserController {
   }
 
   @HttpCode(204)
-  @Delete(':username')
-  destroy(@Param() params: UserDTO) {
-    // return this.userService.destroy(params);
+  @Delete(':id')
+  async destroy(@Param() userRequest: UserDTO): Promise<void> {
+    await this.userService.destroy(userRequest.id);
   }
 }
