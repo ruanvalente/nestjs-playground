@@ -19,16 +19,20 @@ export class UserService {
         HttpStatus.BAD_REQUEST,
       );
     } else {
-      return this.userRepository.store(userDTO);
+      return await this.userRepository.store(userDTO);
     }
   }
 
   async index(): Promise<User[]> {
-    return this.userRepository.index();
+    return await this.userRepository.index();
   }
 
   async show(id: string): Promise<User> {
-    return this.userRepository.show(id);
+    return await this.userRepository.show(id);
+  }
+
+  async updated(id: string, userRequest: UserDTO): Promise<User> {
+    return await this.userRepository.updated(id, userRequest);
   }
 
   async destroy(id: string): Promise<void> {

@@ -32,9 +32,9 @@ export class UserController {
     return await this.userService.show(userRequest.id);
   }
 
-  @Put()
-  update(@Body() user: UserDTO): void {
-    // return this.userService.update(user);
+  @Put(':id')
+  async update(@Param() id, @Body() userRequest: UserDTO): Promise<UserDTO> {
+    return await this.userService.updated(id, userRequest);
   }
 
   @HttpCode(204)
