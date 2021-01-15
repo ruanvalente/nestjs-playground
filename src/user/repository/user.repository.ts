@@ -4,7 +4,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { hash } from 'bcrypt';
 
 import { User } from 'src/user/entity/user.entity';
-import { UserDTO } from '../user/dto/user';
+import { UserDTO } from '../dto/user';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -75,7 +75,9 @@ export class UserRepository extends Repository<User> {
     userUpdated.name = name ? name : userUpdated.name;
     userUpdated.username = username ? username : userUpdated.username;
     userUpdated.email = email ? email : userUpdated.email;
-    userUpdated.password = password ? password : userUpdated.password;
+    userUpdated.password = password
+      ? await this.hashPassword(password)
+      : userUpdated.password;
     userUpdated.age = age ? age : userUpdated.age;
 
     try {

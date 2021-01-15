@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 
 import { UserController } from './user/controllers/user.controller';
 import { UserService } from './user/services/user.service';
-import { UserRepository } from './repository/user.repository';
+import { UserRepository } from './user/repository/user.repository';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/ typeorm.config';
