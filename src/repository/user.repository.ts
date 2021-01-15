@@ -63,6 +63,33 @@ export class UserRepository extends Repository<User> {
     return user;
   }
 
+  async updated(id: string, userRequest: UserDTO): Promise<User> {
+    const userUpdated = await this.findOne(id);
+
+    const { name, username, email, password, age } = userRequest;
+
+    if (!userUpdated) {
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+    }
+
+    userUpdated.name = name ? name : userUpdated.name;
+    userUpdated.username = username ? username : userUpdated.username;
+    userUpdated.email = email ? email : userUpdated.email;
+    userUpdated.password = password ? password : userUpdated.password;
+    userUpdated.age = age ? age : userUpdated.age;
+
+    try {
+      await userUpdated.save();
+      return userUpdated;
+    } catch (error) {
+      console.log('aqui');
+      throw new HttpException(
+        'Failed to update user',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async destroy(id: string): Promise<void> {
     const user = await this.findOne(id, {
       select: ['id'],
