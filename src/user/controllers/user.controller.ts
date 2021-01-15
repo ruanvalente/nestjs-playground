@@ -5,42 +5,41 @@ import {
   Post,
   Param,
   Put,
-  HttpException,
-  HttpStatus,
   Delete,
   HttpCode,
 } from '@nestjs/common';
 
-import { UserDTO } from './../dto/user';
 import { UserService } from '../services/user.service';
+import { UserDTO } from './../dto/user';
 
 @Controller('v1/users')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  findAll(): Array<UserDTO> {
-    return this.userService.findAll();
+  async index(): Promise<UserDTO[]> {
+    return await this.userService.index();
   }
 
   @Post()
-  store(@Body() user: UserDTO): void {
-    return this.userService.store(user);
+  async store(@Body() user: UserDTO): Promise<UserDTO> {
+    const createUser = await this.userService.store(user);
+    return createUser;
   }
 
-  @Get(':username')
-  show(@Param() params: UserDTO) {
-    return this.userService.show(params.username);
+  @Get(':id')
+  async show(@Param() userRequest: UserDTO): Promise<UserDTO> {
+    return await this.userService.show(userRequest.id);
   }
 
-  @Put()
-  update(@Body() user: UserDTO): void {
-    return this.userService.update(user);
+  @Put(':id')
+  async update(@Param() id, @Body() userRequest: UserDTO): Promise<UserDTO> {
+    return await this.userService.updated(id, userRequest);
   }
 
   @HttpCode(204)
-  @Delete(':username')
-  destroy(@Param() params: UserDTO) {
-    return this.userService.destroy(params);
+  @Delete(':id')
+  async destroy(@Param() userRequest: UserDTO): Promise<void> {
+    await this.userService.destroy(userRequest.id);
   }
 }
