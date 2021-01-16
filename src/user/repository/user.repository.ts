@@ -44,7 +44,7 @@ export class UserRepository extends Repository<User> {
   async index(): Promise<User[]> {
     const users = await this.find();
 
-    if (users.length === 0) {
+    if (!users) {
       throw new HttpException('No data currently registered', HttpStatus.OK);
     }
 
@@ -69,7 +69,7 @@ export class UserRepository extends Repository<User> {
     const { name, username, email, password, age } = userRequest;
 
     if (!userUpdated) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
     }
 
     userUpdated.name = name ? name : userUpdated.name;
@@ -84,6 +84,7 @@ export class UserRepository extends Repository<User> {
       await userUpdated.save();
       return userUpdated;
     } catch (error) {
+      console.log('aqui');
       throw new HttpException(
         'Failed to update user',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -100,6 +101,6 @@ export class UserRepository extends Repository<User> {
       throw new HttpException('User ID not found', HttpStatus.NOT_FOUND);
     }
 
-    await this.delete({ id });
+    await this.delete({ id: id });
   }
 }
